@@ -40,9 +40,23 @@ class CommandController extends AbstractController
         $currentOrder = $repository->findOneBy(array(), array('id' => 'DESC'));
         $listProducts = $currentOrder->getProducts();
         $price = $currentOrder->getPrix();
-
+        $repository = $this->getDoctrine()
+        ->getManager()
+        ->getRepository('App\Entity\Product')
+        ;
+        $newListProducts = [];
+        if ($listProducts !== null)
+        {
+            foreach ($listProducts as $key => $value)
+            {
+                $product = $repository->findOneById($key);
+                $product_name = $product->getName();
+                $newListProducts[$product_name]=$value;
+    
+            }
+        }
         return $this->render('order\order.html.twig', 
-        array('listProducts' => $listProducts , 'price' => $price)
+        array('listProducts' => $newListProducts , 'price' => $price)
         );
     }
     public function addCommand()

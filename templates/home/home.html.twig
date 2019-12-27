@@ -26,26 +26,7 @@
    <div class="container-fluid">
     <div class="row content">
       <div class="col-sm-8">
-        {% for message in app.flashes('product') %}
-            <div class="alert alert-success">
-                {{ message }}
-            </div>
-        {% endfor %}
-        {% for message in app.flashes('deleteProduct') %}
-            <div class="alert alert-success">
-                {{ message }}
-            </div>
-        {% endfor %}
-        {% for message in app.flashes('client') %}
-            <div class="alert alert-success">
-                {{ message }}
-            </div>
-        {% endfor %}
-        {% for message in app.flashes('deleteClient') %}
-            <div class="alert alert-success">
-                {{ message }}
-            </div>
-        {% endfor %}
+        {{ include('flash.html.twig') }}
         <div class="row">
         {{ render(controller("App\\Controller\\ProductController::displayProduct")) }}
         </div>

@@ -59,9 +59,6 @@ class ProductController extends AbstractController
 
         }
 
-        // À ce stade, le formulaire n'est pas valide car :
-        // - Soit la requête est de type GET, donc le visiteur vient d'arriver sur la page et veut voir le formulaire
-        // - Soit la requête est de type POST, mais le formulaire contient des valeurs invalides, donc on l'affiche de nouveau
         return $this->render('product\add.html.twig', array(
           'form' => $form->createView(),
         ));
@@ -84,7 +81,7 @@ class ProductController extends AbstractController
       }
       return $this->redirectToRoute('homepage');
     }
-    public function sendProduct(string $product_name)
+    public function sendProduct(int $product_id)
     {
 
         $repository = $this->getDoctrine()
@@ -99,19 +96,27 @@ class ProductController extends AbstractController
         ->getManager()
         ->getRepository('App\Entity\Product')
         ;
-        $product = $repository->findOneByName($product_name);
+
+        $product = $repository->findOneById($product_id);
+        //Check if product_id exist
+        if ($product === null)
+        {
+          $this->addFlash('error', 'This product does not exist !');
+          return $this->redirectToRoute('homepage');
+        }
         $product_price = $product->getPrix();
+        $product_name = $product->getName();
         $price = $price + $product_price;
 
         $currentOrder->setPrix($price);
 
-        if(array_key_exists($product_name, $products))
+        if(array_key_exists($product_id, $products))
         {
-          $products[$product_name] += 1;
+          $products[$product_id] += 1;
           
         }
         else{
-          $products[$product_name] = 1;
+          $products[$product_id] = 1;
         }
         $currentOrder->setProducts($products);
 

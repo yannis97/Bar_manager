@@ -26,7 +26,7 @@ class Command
     private $prix;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $client_id;
 

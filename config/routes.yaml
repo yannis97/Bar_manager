@@ -19,7 +19,7 @@ balance:
     path: /balance
     controller: App\Controller\ClientController::changeBalance
 sendProduct:
-    path: /sendproduct/{product_name}
+    path: /sendproduct/{product_id}
     controller: App\Controller\ProductController::sendProduct
 saveCommand:
     path: /saveCommand
