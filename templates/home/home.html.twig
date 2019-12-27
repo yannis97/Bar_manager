@@ -1,0 +1,46 @@
+{# templates/home.html.twig #}
+{% extends "layout.html.twig" %}
+{% block body %}
+    <div class="jumbotron text-center">
+      <h1>Bar Manager</h1>
+      <p>
+      <div class="btn-group">
+      <form action="{{ path('deleteProduct') }}" method="POST">
+        <button type="submit" class="btn btn-outline-primary waves-effect"><b>DELETE PRODUCT</b></button>
+      </form>
+      <form action="{{ path('addProduct') }}">
+        <button type="submit" class="btn btn-outline-primary waves-effect"><b>ADD PRODUCT</b></button>
+      </form>
+      <form action="{{ path('balance') }}">
+        <button type="submit" class="btn btn-outline-primary waves-effect"><b>CLIENT BALANCE</b></button>
+      </form>
+      <form action="{{ path('addClient') }}">
+        <button type="submit" class="btn btn-outline-primary waves-effect"><b>ADD CLIENT</b></button>
+      </form>
+      </div>
+      </p>
+    </div>
+   <div class="container-fluid">
+    <div class="row content">
+      <div class="col-sm-8">
+        <div class="row">
+        {{ render(controller("App\\Controller\\ProductController::displayProduct")) }}
+        </div>
+      </div>
+    <div class="col-sm-4 text-center sidecart ">
+    <div>
+        <h2>Order</h2>
+      </div>
+      <div>
+        {{ render(controller("App\\Controller\\CommandController::displayCurrentCommand")) }}
+      </div>
+        {{ render(url('saveCommand')) }}
+        {% for message in app.flashes('info') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    </div>
+  </div>
+{% endblock %}
