@@ -30,3 +30,6 @@ addClient:
 addCommand:
     path: /addCommand
     controller: App\Controller\CommandController::addCommand
+displayAllOrders:
+    path: /displayAll
+    controller: App\Controller\CommandController::displayAllOrders

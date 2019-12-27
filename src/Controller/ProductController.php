@@ -53,6 +53,7 @@ class ProductController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($product);
             $em->flush();
+            $this->addFlash('product', 'Product successfully added !');
           }
           return $this->redirectToRoute('homepage');
 
@@ -71,7 +72,7 @@ class ProductController extends AbstractController
       ->getManager()
       ->getRepository('App\Entity\Product')
       ;
-
+      
       $listProducts = $repository->findAll();
       $length = count($listProducts);
       $em = $this->getDoctrine()->getManager();
@@ -79,6 +80,7 @@ class ProductController extends AbstractController
       {
         $em->remove($listProducts[$length-1]);
         $em->flush();
+        $this->addFlash('deleteProduct', 'Product deleted successfully !');
       }
       return $this->redirectToRoute('homepage');
     }

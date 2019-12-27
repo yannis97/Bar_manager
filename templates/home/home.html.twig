@@ -17,12 +17,35 @@
       <form action="{{ path('addClient') }}">
         <button type="submit" class="btn btn-outline-primary waves-effect"><b>ADD CLIENT</b></button>
       </form>
+      <form action="{{ path('displayAllOrders') }}">
+        <button type="submit" class="btn btn-outline-primary waves-effect"><b>ORDERS INFO</b></button>
+      </form>
       </div>
       </p>
     </div>
    <div class="container-fluid">
     <div class="row content">
       <div class="col-sm-8">
+        {% for message in app.flashes('product') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('deleteProduct') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('client') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('deleteClient') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
         <div class="row">
         {{ render(controller("App\\Controller\\ProductController::displayProduct")) }}
         </div>
@@ -36,7 +59,7 @@
       </div>
         {{ render(url('saveCommand')) }}
         {% for message in app.flashes('info') %}
-            <div class="alert alert-success">
+            <div class="alert alert-primary">
                 {{ message }}
             </div>
         {% endfor %}

@@ -1,0 +1,29 @@
+{% extends "layout.html.twig" %}
+{% block body %}
+
+    <div class="jumbotron text-center">
+      <h1>Orders informations</h1>
+      <p>
+      <div class="btn-group">
+      <form action="{{ path('homepage') }}">
+        <button type="submit" class="btn btn-outline-primary waves-effect"><b>HOME</b></button>
+      </form>
+      </div>
+      </p>    
+    </div>
+    
+<ul class="list-group">
+  {% for order in listOrders %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <h4>Order Id : {{order.id}}</h4>
+        <h4>Client Id : {{order.client}}</h4>
+        <h4>{{order.price}} €</h4>
+    </li>
+  {% endfor %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div id="total"><b>Total Sold</b></div>
+        <span class="badge badge-pill badge-primary">{{total}} €</span>
+    </li>
+</ul>
+{% endblock %}
+

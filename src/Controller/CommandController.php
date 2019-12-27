@@ -21,7 +21,7 @@ class CommandController extends AbstractController
         ;
         $currentOrder = $repository->findOneBy(array('id'=>'DESC'));
         $products = $currentOrder->getProducts();
-        $products[product_name] += 1;
+        $products[$product_name] += 1;
         $currentOrder->setProducts($products);
 
         var_dump($currentOrder->getProducts());
@@ -50,10 +50,35 @@ class CommandController extends AbstractController
 
         $order = new Command();
         $order->setPrix(0);
+        $order->setClientId(1);
         $em = $this->getDoctrine()->getManager();
         $em->persist($order);
         $em->flush();
         return $this->redirectToRoute('homepage');
+    }
+    public function displayAllOrders(){
+        $repository = $this->getDoctrine()
+        ->getManager()
+        ->getRepository('App\Entity\Command')
+        ;
+        $listOrders = $repository->findAll();
+        $newOrderList = [];
+        $totalSold = 0;
+        foreach ($listOrders as $Order)
+        {
+           $Order_data = [];
+           $Order_data['client'] =  $Order->getClientId();
+           $Order_data['id'] = $Order->getId();
+           $Order_data['listproducts'] = $Order->getProducts();
+           $Order_data['price'] =  $Order->getPrix();
+            array_push($newOrderList, $Order_data);
+            $totalSold += $Order->getPrix();
+        }
+        //For eache orders, find client_id , find price, find listProducts with client id , find client NAME
+        // Order_ID , Orders.client , Orders.price , Orders.Listproducts
+        return $this->render('order\displayAll.html.twig', 
+        array('listOrders' => $newOrderList , 'total' => $totalSold)
+        );
     }
 
     public function saveCommand(Request $request)
@@ -88,10 +113,9 @@ class CommandController extends AbstractController
 
         // Si la requête est en POST
         if ($request->isMethod('POST')) {
-            $em = $this->getDoctrine()->getManager();
             $form->handleRequest($request);
             if ($form->isValid()){
-
+                $em = $this->getDoctrine()->getManager();
                 $client= $form->get('client')->getData();
                 $client_id = $client->getId();
                 $currentOrder->setClientId($client_id);
@@ -102,26 +126,31 @@ class CommandController extends AbstractController
                     if($new_solde>=0)
                     {
                         $client->setSolde($new_solde);
-                        $this->addFlash('info', 'Command registered !','Balance : ', $new_solde);
+                        $em->flush();
+                        $this->addFlash('info', 'Command registered and paid by account !');
                         return $this->redirectToRoute('addCommand');
                     }
                     else{
-                        $this->addFlash('info', 'Command denied !', 'Balance : ',$current_solde);
+                        $em->flush();
+                        $this->addFlash('info', 'Command denied ! Not enough cash on account !');
                         return $this->redirectToRoute('homepage');
                     }
                 }
                 else if ($form->get('cash')->isClicked()) 
                 {
-                    $this->addFlash('info', 'Command registered !','Balance : ', $current_solde);
+                    $em->flush();
+                    $this->addFlash('info', 'Command registered and paid by cash ! ');
                     return $this->redirectToRoute('addCommand');
                 }
                 else {
-                    $em->remove($currentOrder);
+                    $currentOrder->setProducts([]);
+                    $currentOrder->setPrix(0);
+                    $currentOrder->setClientId(999);
+                    $em->flush();
                     $this->addFlash('info', 'Command cleared !');
-                    return $this->redirectToRoute('addCommand');
+                    return $this->redirectToRoute('homepage');
                 }
             }
-              $em->flush();
         }
 
         // À ce stade, le formulaire n'est pas valide car :

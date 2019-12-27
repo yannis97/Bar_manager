@@ -6,6 +6,11 @@
     </div>
     
 <div class="container">
+        {% for message in app.flashes('balance') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
 {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
   <div class="form-group">
     <h5>{{ form_label(form.client, "Client", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}</h5>
@@ -28,10 +33,10 @@
    </div>
    
     <div class="col-sm-10">
-      {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
-      {{ form_widget(form.back, {'attr': {'class': 'btn btn-primary'}}) }}
-      {{ form_widget(form.loadinfo, {'attr': {'class': 'btn btn-primary'}}) }}
-      {{ form_widget(form.delete, {'attr': {'class': 'btn btn-primary'}}) }}
+      {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary btn-mlarge'}}) }}
+      {{ form_widget(form.back, {'attr': {'class': 'btn btn-primary btn-mlarge'}}) }}
+      {{ form_widget(form.loadinfo, {'attr': {'class': 'btn btn-primary btn-mlarge'}}) }}
+      {{ form_widget(form.delete, {'attr': {'class': 'btn btn-primary btn-mlarge'}}) }}
     </div>
     {{ form_end(form) }}
 </div>

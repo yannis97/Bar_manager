@@ -45,14 +45,11 @@ class ClientController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($client);
             $em->flush();
+            $this->addFlash('client', 'Client successfully added !');
           }
           return $this->redirectToRoute('homepage');
 
         }
-
-        // À ce stade, le formulaire n'est pas valide car :
-        // - Soit la requête est de type GET, donc le visiteur vient d'arriver sur la page et veut voir le formulaire
-        // - Soit la requête est de type POST, mais le formulaire contient des valeurs invalides, donc on l'affiche de nouveau
         return $this->render('client\add.html.twig', array(
           'form' => $form->createView(),
         ));
@@ -103,6 +100,7 @@ class ClientController extends AbstractController
                 $client->setSolde($current_solde + $new_solde);
                 $em = $this->getDoctrine()->getManager();
                 $em->flush();
+                $this->addFlash('balance', 'Balance changed successfully !');
                 return $this->render('client\balance.html.twig', array(
                     'form' => $form->createView(), 'solde' => $current_solde + $new_solde
                   ));
@@ -113,7 +111,8 @@ class ClientController extends AbstractController
                 $em = $this->getDoctrine()->getManager();
                 $em->remove($client);
                 $em->flush();
-                return $this->redirectToRoute('balance');
+                $this->addFlash('deleteClient', 'Client deleted successfully !');
+                return $this->redirectToRoute('homepage');
             }
             else
             {
