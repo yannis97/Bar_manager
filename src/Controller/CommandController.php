@@ -60,7 +60,8 @@ class CommandController extends AbstractController
         ->getRepository('App\Entity\Command')
         ;
         $listOrders = $repository->findAll();
-        $newOrderList = [];
+        // newOrderList will contain all informations we want in details for all orders such as the name of products
+        $newlistOrders = [];
         $totalSold = 0;
 
         $repository = $this->getDoctrine()
@@ -88,13 +89,11 @@ class CommandController extends AbstractController
            $Order_data['id'] = $Order->getId();
            $Order_data['listproducts'] = $listProductsName;
            $Order_data['price'] =  $Order->getPrix();
-            array_push($newOrderList, $Order_data);
+            array_push($newlistOrders, $Order_data);
             $totalSold += $Order->getPrix();
         }
-        //For eache orders, find client_id , find price, find listProducts with client id , find client NAME
-        // Order_ID , Orders.client , Orders.price , Orders.Listproducts
         return $this->render('order\displayAll.html.twig', 
-        array('listOrders' => $newOrderList , 'total' => $totalSold)
+        array('listOrders' => $newlistOrders , 'total' => $totalSold)
         );
     }
 
@@ -169,11 +168,7 @@ class CommandController extends AbstractController
                 }
             }
         }
-
-        // À ce stade, le formulaire n'est pas valide car :
-        // - Soit la requête est de type GET, donc le visiteur vient d'arriver sur la page et veut voir le formulaire
-        // - Soit la requête est de type POST, mais le formulaire contient des valeurs invalides, donc on l'affiche de nouveau
-        return $this->render('command\save.html.twig', array(
+        return $this->render('order\save.html.twig', array(
             'form' => $form->createView(),
         ));
     }
