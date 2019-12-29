@@ -13,24 +13,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class CommandController extends AbstractController
 {
-    public function sendProduct(String $product_name)
-    {
-        $repository = $this->getDoctrine()
-        ->getManager()
-        ->getRepository('App\Entity\Command')
-        ;
-        $currentOrder = $repository->findOneBy(array('id'=>'DESC'));
-        $products = $currentOrder->getProducts();
-        $products[$product_name] += 1;
-        $currentOrder->setProducts($products);
-
-        var_dump($currentOrder->getProducts());
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($currentOrder);
-        $em->flush();
-
-        return $this->redirectToRoute('homepage');
-    }
     public function displayCurrentCommand()
     {
         $repository = $this->getDoctrine()
@@ -44,29 +26,31 @@ class CommandController extends AbstractController
         ->getManager()
         ->getRepository('App\Entity\Product')
         ;
-        $newListProducts = [];
+        $listProductsName = [];
         if ($listProducts !== null)
         {
             foreach ($listProducts as $key => $value)
             {
                 $product = $repository->findOneById($key);
-                $product_name = $product->getName();
-                $newListProducts[$product_name]=$value;
-    
+                if($product!==null)
+                {
+                    $product_name = $product->getName();
+                    $listProductsName[$product_name]=$value;
+                }
             }
         }
         return $this->render('order\order.html.twig', 
-        array('listProducts' => $newListProducts , 'price' => $price)
+        array('listProducts' => $listProductsName , 'price' => $price)
         );
     }
     public function addCommand()
     {
 
-        $order = new Command();
-        $order->setPrix(0);
-        $order->setClientId(1);
+        $new_order = new Command();
+        $new_order->setPrix(0);
+        $new_order->setClientId(0);
         $em = $this->getDoctrine()->getManager();
-        $em->persist($order);
+        $em->persist($new_order);
         $em->flush();
         return $this->redirectToRoute('homepage');
     }
@@ -78,12 +62,31 @@ class CommandController extends AbstractController
         $listOrders = $repository->findAll();
         $newOrderList = [];
         $totalSold = 0;
+
+        $repository = $this->getDoctrine()
+        ->getManager()
+        ->getRepository('App\Entity\Product')
+        ;
         foreach ($listOrders as $Order)
         {
+           $listProducts = $Order->getProducts();
+           $listProductsName = [];
+           if ($listProducts !== null)
+           {
+               foreach ($listProducts as $key => $value)
+               {
+                   $product = $repository->findOneById($key);
+                   if($product!==null)
+                   {
+                       $product_name = $product->getName();
+                       $listProductsName[$product_name]=$value;
+                   }
+               }
+           }
            $Order_data = [];
            $Order_data['client'] =  $Order->getClientId();
            $Order_data['id'] = $Order->getId();
-           $Order_data['listproducts'] = $Order->getProducts();
+           $Order_data['listproducts'] = $listProductsName;
            $Order_data['price'] =  $Order->getPrix();
             array_push($newOrderList, $Order_data);
             $totalSold += $Order->getPrix();
@@ -159,7 +162,7 @@ class CommandController extends AbstractController
                 else {
                     $currentOrder->setProducts([]);
                     $currentOrder->setPrix(0);
-                    $currentOrder->setClientId(999);
+                    $currentOrder->setClientId(0);
                     $em->flush();
                     $this->addFlash('info', 'Command cleared !');
                     return $this->redirectToRoute('homepage');
@@ -172,6 +175,24 @@ class CommandController extends AbstractController
         // - Soit la requête est de type POST, mais le formulaire contient des valeurs invalides, donc on l'affiche de nouveau
         return $this->render('command\save.html.twig', array(
             'form' => $form->createView(),
-        ));        
+        ));
+    }
+    public function deleteAllCommand()
+    {
+      $repository = $this->getDoctrine()
+      ->getManager()
+      ->getRepository('App\Entity\Command')
+      ;
+      
+      $listOrders = $repository->findAll();
+      $length = count($listOrders);
+      $em = $this->getDoctrine()->getManager();
+      for($i=0;$i<$length;$i++)
+      {
+        $em->remove($listOrders[$i]);
+        $em->flush();
+        $this->addFlash('deleteProduct', 'All Orders deleted successfully !');
+      }
+      return $this->redirectToRoute('addCommand');
     }
 }

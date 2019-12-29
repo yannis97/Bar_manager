@@ -15,15 +15,6 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormEvents;
 class ClientController extends AbstractController
 {
-    /**
-     * @Route("/client", name="client")
-     */
-    public function index()
-    {
-        return $this->render('client/index.html.twig', [
-            'controller_name' => 'ClientController',
-        ]);
-    }
     public function addClient(Request $request)
     {
         $client = new Client();
@@ -37,7 +28,6 @@ class ClientController extends AbstractController
         ;
         $form = $formBuilder->getForm();
 
-    // Si la requête est en POST
         if ($request->isMethod('POST')) {
           
           $form->handleRequest($request);
@@ -48,13 +38,12 @@ class ClientController extends AbstractController
             $this->addFlash('client', 'Client successfully added !');
           }
           return $this->redirectToRoute('homepage');
-
         }
         return $this->render('client\add.html.twig', array(
           'form' => $form->createView(),
         ));
     }
-    public function changeBalance(Request $request)
+    public function manageClient(Request $request)
     {
         $solde = 0;
         $repository = $this->getDoctrine()
@@ -77,7 +66,7 @@ class ClientController extends AbstractController
             ->add('back',   SubmitType::class)
             ->add('loadinfo',   SubmitType::class , ['label'=>'Load Balance'])
             ->add('delete',   SubmitType::class , ['label'=>'Delete'])
-            ->add('new_balance',   NumberType::class , ['data'=>'0'])
+            ->add('add_balance',   NumberType::class , ['data'=>'0'])
             ;
         $form = $formBuilder->getForm();
 
@@ -88,6 +77,7 @@ class ClientController extends AbstractController
             {
                 $client= $form->get('client')->getData();
                 $solde = $client->getSolde();
+                $this->addFlash('balance', 'Balance loaded successfully !');
                 return $this->render('client\balance.html.twig', array(
                     'form' => $form->createView(), 'solde' => $solde
                   ));
@@ -95,14 +85,14 @@ class ClientController extends AbstractController
             if($form->isValid() and $form->get('save')->isClicked())
             {
                 $client= $form->get('client')->getData();
-                $new_solde = $form->get('new_balance')->getData();
+                $add_solde = $form->get('add_balance')->getData();
                 $current_solde = $client->getSolde();
-                $client->setSolde($current_solde + $new_solde);
+                $client->setSolde($current_solde + $add_solde);
                 $em = $this->getDoctrine()->getManager();
                 $em->flush();
                 $this->addFlash('balance', 'Balance changed successfully !');
                 return $this->render('client\balance.html.twig', array(
-                    'form' => $form->createView(), 'solde' => $current_solde + $new_solde
+                    'form' => $form->createView(), 'solde' => $current_solde + $add_solde
                   ));
             }
             if($form->isValid() and $form->get('delete')->isClicked())
@@ -114,8 +104,13 @@ class ClientController extends AbstractController
                 $this->addFlash('deleteClient', 'Client deleted successfully !');
                 return $this->redirectToRoute('homepage');
             }
+            if($form->isValid() and $form->get('back')->isClicked())
+            {
+                return $this->redirectToRoute('homepage');
+            }
             else
             {
+              $this->addFlash('error', 'Wrong operation ! Add field must be a number !');
                 return $this->redirectToRoute('homepage');
             }
         }

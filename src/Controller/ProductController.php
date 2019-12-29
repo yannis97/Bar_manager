@@ -20,14 +20,11 @@ class ProductController extends AbstractController
 
     public function displayProduct()
     {
-
       $repository = $this->getDoctrine()
       ->getManager()
       ->getRepository('App\Entity\Product')
       ;
-
       $listProducts = $repository->findAll();
-
       return $this->render('product\products.html.twig', 
         array('listProducts' => $listProducts)
       );
@@ -83,7 +80,6 @@ class ProductController extends AbstractController
     }
     public function sendProduct(int $product_id)
     {
-
         $repository = $this->getDoctrine()
         ->getManager()
         ->getRepository('App\Entity\Command')

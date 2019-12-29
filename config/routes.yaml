@@ -15,9 +15,9 @@ addProduct:
 deleteProduct:
     path: /deleteProduct
     controller: App\Controller\ProductController::deleteProduct
-balance:
-    path: /balance
-    controller: App\Controller\ClientController::changeBalance
+manageClient:
+    path: /manageClient
+    controller: App\Controller\ClientController::manageClient
 sendProduct:
     path: /sendproduct/{product_id}
     controller: App\Controller\ProductController::sendProduct
@@ -33,3 +33,6 @@ addCommand:
 displayAllOrders:
     path: /displayAll
     controller: App\Controller\CommandController::displayAllOrders
+deleteAllCommand:
+    path: /deleteAllCommand
+    controller: App\Controller\CommandController::deleteAllCommand
