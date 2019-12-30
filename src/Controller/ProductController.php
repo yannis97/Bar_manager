@@ -42,9 +42,7 @@ class ProductController extends AbstractController
         ;
         $form = $formBuilder->getForm();
 
-    // Si la requête est en POST
-        if ($request->isMethod('POST')) {
-          
+        if ($request->isMethod('POST')) {          
           $form->handleRequest($request);
           if ($form->isValid() and $form->get('save')->isClicked()) {
             $em = $this->getDoctrine()->getManager();
@@ -52,8 +50,9 @@ class ProductController extends AbstractController
             $em->flush();
             $this->addFlash('product', 'Product successfully added !');
           }
+          if (!$form->isValid())
+          {$this->addFlash('error', 'Incorrect value for product price !');}
           return $this->redirectToRoute('homepage');
-
         }
 
         return $this->render('product\add.html.twig', array(
@@ -66,15 +65,17 @@ class ProductController extends AbstractController
       ->getManager()
       ->getRepository('App\Entity\Product')
       ;
-      
-      $listProducts = $repository->findAll();
-      $length = count($listProducts);
+      $product = $repository->findOneBy(array(), array('id' => 'DESC'));
       $em = $this->getDoctrine()->getManager();
-      if($length>0)
+      if ($product !== null)
       {
-        $em->remove($listProducts[$length-1]);
-        $em->flush();
+        $em->remove($product);
         $this->addFlash('deleteProduct', 'Product deleted successfully !');
+        $em->flush();
+      }
+      else
+      {
+        $this->addFlash('error', 'No product found !');
       }
       return $this->redirectToRoute('homepage');
     }
@@ -108,8 +109,7 @@ class ProductController extends AbstractController
 
         if(array_key_exists($product_id, $products))
         {
-          $products[$product_id] += 1;
-          
+          $products[$product_id] += 1;        
         }
         else{
           $products[$product_id] = 1;

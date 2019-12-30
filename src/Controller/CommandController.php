@@ -63,7 +63,7 @@ class CommandController extends AbstractController
         // newOrderList will contain all informations we want in details for all orders such as the name of products
         $newlistOrders = [];
         $totalSold = 0;
-
+        $listtotalProducts = [];
         $repository = $this->getDoctrine()
         ->getManager()
         ->getRepository('App\Entity\Product')
@@ -81,6 +81,13 @@ class CommandController extends AbstractController
                    {
                        $product_name = $product->getName();
                        $listProductsName[$product_name]=$value;
+                       if(array_key_exists($product_name, $listtotalProducts))
+                       {
+                        $listtotalProducts[$product_name]+=$value;      
+                       }
+                       else{
+                        $listtotalProducts[$product_name]=1;
+                       }
                    }
                }
            }
@@ -93,7 +100,7 @@ class CommandController extends AbstractController
             $totalSold += $Order->getPrix();
         }
         return $this->render('order\displayAll.html.twig', 
-        array('listOrders' => $newlistOrders , 'total' => $totalSold)
+        array('listOrders' => $newlistOrders , 'total' => $totalSold , 'listTotalProducts' => $listtotalProducts)
         );
     }
 

@@ -1,5 +1,5 @@
 {% for product in listProducts %}
-      <div class="col-sm-2">
+      <div class="col-sm-2 bottom-buffer">
         <h3>
          <form action="{{ path('sendProduct',{ 'product_id' : product.id}) }}">
           <button type="input" class="btn-xlarge btn-primary btn-rounded">{{ product.name }}</button>
