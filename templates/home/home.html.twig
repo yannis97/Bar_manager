@@ -11,11 +11,11 @@
     <div class="row content">
       <div class="col-sm-8">
         {{ include('flash.html.twig') }}
-        <div class="row">
+        <div class="row side-buffer">
         {{ render(controller("App\\Controller\\ProductController::displayProduct")) }}
         </div>
       </div>
-    <div class="col-sm-4 text-center sidecart ">
+    <div class="col-sm-4 text-center sidecart">
     <div>
         <h2>Order</h2>
       </div>
