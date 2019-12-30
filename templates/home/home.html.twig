@@ -4,23 +4,7 @@
     <div class="jumbotron text-center">
       <h1>Bar Manager</h1>
       <p>
-      <div class="btn-group">
-      <form action="{{ path('deleteProduct') }}" method="POST">
-        <button type="submit" class="btn btn-outline-primary waves-effect"><b>DELETE PRODUCT</b></button>
-      </form>
-      <form action="{{ path('addProduct') }}">
-        <button type="submit" class="btn btn-outline-primary waves-effect"><b>ADD PRODUCT</b></button>
-      </form>
-      <form action="{{ path('manageClient') }}">
-        <button type="submit" class="btn btn-outline-primary waves-effect"><b>MANAGE CLIENT</b></button>
-      </form>
-      <form action="{{ path('addClient') }}">
-        <button type="submit" class="btn btn-outline-primary waves-effect"><b>ADD CLIENT</b></button>
-      </form>
-      <form action="{{ path('displayAllOrders') }}">
-        <button type="submit" class="btn btn-outline-primary waves-effect"><b>ORDERS INFO</b></button>
-      </form>
-      </div>
+      {{ include('home/btnOptions.html.twig') }}
       </p>
     </div>
    <div class="container-fluid">
@@ -38,7 +22,7 @@
       <div>
         {{ render(controller("App\\Controller\\CommandController::displayCurrentCommand")) }}
       </div>
-        {{ render(url('saveCommand')) }}
+        {{ render(controller('App\\Controller\\CommandController::saveCommand')) }}
         {% for message in app.flashes('info') %}
             <div class="alert alert-primary">
                 {{ message }}

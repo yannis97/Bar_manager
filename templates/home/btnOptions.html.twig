@@ -1,0 +1,17 @@
+      <div class="btn-group">
+        <form action="{{ path('deleteProduct') }}" method="POST">
+            <button type="submit" class="btn btn-outline-primary waves-effect"><b>DELETE PRODUCT</b></button>
+        </form>
+        <form action="{{ path('addProduct') }}">
+            <button type="submit" class="btn btn-outline-primary waves-effect"><b>ADD PRODUCT</b></button>
+        </form>
+        <form action="{{ path('manageClient') }}">
+            <button type="submit" class="btn btn-outline-primary waves-effect"><b>MANAGE CLIENT</b></button>
+        </form>
+        <form action="{{ path('addClient') }}">
+            <button type="submit" class="btn btn-outline-primary waves-effect"><b>ADD CLIENT</b></button>
+        </form>
+        <form action="{{ path('displayAllOrders') }}">
+            <button type="submit" class="btn btn-outline-primary waves-effect"><b>ORDERS INFO</b></button>
+        </form>
+      </div>

@@ -100,7 +100,7 @@ class CommandController extends AbstractController
             $totalSold += $Order->getPrix();
         }
         return $this->render('order\displayAll.html.twig', 
-        array('listOrders' => $newlistOrders , 'total' => $totalSold , 'listTotalProducts' => $listtotalProducts)
+        array('listOrders' => $newlistOrders , 'total' => $totalSold , 'listtotalProducts' => $listtotalProducts)
         );
     }
 

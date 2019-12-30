@@ -2,11 +2,11 @@
 {{ form_start(form, {'action': path('saveCommand'), 'method': 'POST'},{'attr': {'class': 'form-horizontal'}}) }}
   <div class="form-group">
     <h5>{{ form_label(form.client, "Client", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}</h5>
-    <div class="col-sm-12">
+    <div class="col-sm-16">
       {{ form_widget(form.client, {'attr': {'class': 'form-control'}}) }}
     </div>
   </div>
-    <div class="col-sm-12">
+    <div class="col-sm-16">
       {{ form_widget(form.cash, {'attr': {'class': 'btn btn-primary btn-mlarge'}}) }}
       {{ form_widget(form.card, {'attr': {'class': 'btn btn-primary btn-mlarge'}}) }}
       {{ form_widget(form.clear, {'attr': {'class': 'btn btn-primary btn-mlarge'}}) }}

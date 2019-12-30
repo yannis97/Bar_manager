@@ -12,7 +12,7 @@
       </p>    
     </div>
 <table class="table table-striped">
-  <thead>
+  <thead id="largeFont">
     <tr>
       <th scope="col">Order ID</th>
       <th scope="col">Client ID</th>
@@ -20,36 +20,40 @@
       <th scope="col">Products</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody id="largeFont">
   {% for order in listOrders %}    
     <tr>
         <td>{{order.id}}</td>
         <td>{{order.client}}</td>
         <td>{{order.price}} €</td>
-        <td><ul class="list-group">       
+        <td>
+        <ul class="list-group">       
           {% for product,quantity in order.listproducts %} 
-          <li class="list-group-item d-flex justify-content-between align-items-right">{{product}} : {{quantity}}</li>
-          {% endfor %}</ul>
+          <li class="list-group-item d-flex justify-content-between align-items-right">{{product}} 
+          <span class="badge badge-pill badge-primary"> {{quantity}}</span>
+          </li>
+          {% endfor %}
+        </ul>
         </td>
-        </tr>
+     </tr>
   {% endfor %}
   </tbody>
 </table>
 <ul class="list-group">
     <li class="list-group-item d-flex justify-content-between align-items-center">
-        <div id="total"><b>Total Sold</b></div>
+        <div id="largeFont"><b>Total Sold</b></div>
         <span class="badge badge-pill badge-primary">{{total}} €</span>
     </li>
     <li class="list-group-item d-flex justify-content-between align-items-center active">
     </li>
     <li class="list-group-item d-flex justify-content-between align-items-center">
-        <div id="total"><b>Product sold</b></div>
+        <div id="largeFont"><b>Product sold</b></div>
         <span class="badge badge-pill badge-light">Quantity</span>
     </li>
-    {% for product,quantity in listTotalProducts %}
+    {% for product,quantity in listtotalProducts %}
     <li class="list-group-item d-flex justify-content-between align-items-center">
-        <div id="total">{{product}}</div>
-        <span class="badge badge-pill badge-secondary">{{quantity}}</span>
+        <div id="mediumFont">{{product}}</div>
+        <span class="badge badge-pill badge-primary">{{quantity}}</span>
     </li>
     {% endfor %}
 </ul>
