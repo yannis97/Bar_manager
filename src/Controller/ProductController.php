@@ -24,7 +24,7 @@ class ProductController extends AbstractController
       ->getManager()
       ->getRepository('App\Entity\Product')
       ;
-      $listProducts = $repository->findAll();
+      $listProducts = $repository->findBy(array(), array('name' => 'ASC'));
       return $this->render('product\products.html.twig', 
         array('listProducts' => $listProducts)
       );
@@ -70,7 +70,7 @@ class ProductController extends AbstractController
       if ($product !== null)
       {
         $em->remove($product);
-        $this->addFlash('deleteProduct', 'Product deleted successfully !');
+        $this->addFlash('deleteProduct', 'Product '. $product->getName() .' deleted successfully !');
         $em->flush();
       }
       else
