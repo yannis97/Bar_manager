@@ -63,13 +63,15 @@ class CommandController extends AbstractController
         // newOrderList will contain all informations we want in details for all orders such as the name of products
         $newlistOrders = [];
         $totalSold = 0;
-        $listtotalProducts = [];
-        $repository = $this->getDoctrine()
-        ->getManager()
-        ->getRepository('App\Entity\Product')
-        ;
+        $listTotalProducts = [];
+
         foreach ($listOrders as $Order)
         {
+            $repository = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('App\Entity\Product')
+            ;
+
            $listProducts = $Order->getProducts();
            $listProductsName = [];
            if ($listProducts !== null)
@@ -81,26 +83,42 @@ class CommandController extends AbstractController
                    {
                        $product_name = $product->getName();
                        $listProductsName[$product_name]=$value;
-                       if(array_key_exists($product_name, $listtotalProducts))
+                       if(array_key_exists($product_name, $listTotalProducts))
                        {
-                        $listtotalProducts[$product_name]+=$value;      
+                        $listTotalProducts[$product_name]+=$value;      
                        }
                        else{
-                        $listtotalProducts[$product_name]=1;
+                        $listTotalProducts[$product_name]=1;
                        }
                    }
                }
            }
+           $repository = $this->getDoctrine()
+           ->getManager()
+           ->getRepository('App\Entity\Client')
+           ;
+           $client_id = $Order->getClientId();
+           $client = $repository->findOneById($client_id);
+           $clientFullName = "";
+           if($client !== null)
+           {
+               $clientFullName = $client->getPrenom().' '.$client->getNom();
+           }
+           else{
+                $clientFullName = "Unknown";
+           }
+
            $Order_data = [];
-           $Order_data['client'] =  $Order->getClientId();
+           $Order_data['client'] =  $clientFullName;
            $Order_data['id'] = $Order->getId();
            $Order_data['listproducts'] = $listProductsName;
            $Order_data['price'] =  $Order->getPrix();
             array_push($newlistOrders, $Order_data);
             $totalSold += $Order->getPrix();
         }
+        arsort($listTotalProducts);
         return $this->render('order\displayAll.html.twig', 
-        array('listOrders' => $newlistOrders , 'total' => $totalSold , 'listtotalProducts' => $listtotalProducts)
+        array('listOrders' => $newlistOrders , 'total' => $totalSold , 'listtotalProducts' => $listTotalProducts)
         );
     }
 
