@@ -24,7 +24,7 @@ class ProductController extends AbstractController
       ->getManager()
       ->getRepository('App\Entity\Product')
       ;
-      $listProducts = $repository->findAll();
+      $listProducts = $repository->findBy(array(), array('name' => 'ASC'));
       return $this->render('product\products.html.twig', 
         array('listProducts' => $listProducts)
       );
