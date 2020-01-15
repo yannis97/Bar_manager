@@ -88,7 +88,7 @@ class CommandController extends AbstractController
                         $listTotalProducts[$product_name]+=$value;      
                        }
                        else{
-                        $listTotalProducts[$product_name]=1;
+                        $listTotalProducts[$product_name]=$value;
                        }
                    }
                }
