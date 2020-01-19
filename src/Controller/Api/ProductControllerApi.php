@@ -20,7 +20,7 @@ class ProductControllerApi extends AbstractController
 
 {   
     /**
-     * @Route("/productApi", name="getProductApi", methods={"GET"})
+     * @Route("/productsApi", name="getProductApi", methods={"GET"})
      */
     public function getProducts()
     {
@@ -84,11 +84,10 @@ class ProductControllerApi extends AbstractController
       if ($product !== null)
       {
         $product_name = $product->getName();
-        $product_price = $product->getPrix();
         $em->remove($product);
         $em->flush();
 
-        return new JsonResponse(['result' => true , 'id' => $id , 'name' => $product_name , 'price' => $product_price]);
+        return new JsonResponse(['result' => true ,'name' => $product_name]);
       }
       else
       {

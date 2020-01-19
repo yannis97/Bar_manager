@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Serializer;
 class CommandControllerApi extends AbstractController
 {
     /**
-     * @Route("/getCurrentCommandApi", name="currentCommandApi", methods={"GET"})
+     * @Route("/currentCommandApi", name="currentCommandApi", methods={"GET"})
      */
     public function getCurrentCommand()
     {
@@ -58,7 +58,7 @@ class CommandControllerApi extends AbstractController
     }
 
     /**
-     * @Route("/addCommandApi", name="addCommandApi", methods={"GET"})
+     * @Route("/addCommandApi", name="addCommandApi", methods={"PUT"})
      */
     public function addCommand()
     {
@@ -73,9 +73,9 @@ class CommandControllerApi extends AbstractController
     }
 
     /**
-     * @Route("/getAllCommandApi", name="allCommandApi", methods={"GET"})
+     * @Route("/allCommandApi", name="allCommandApi", methods={"GET"})
      */
-    public function displayAllOrders(){
+    public function getAllOrders(){
         $repository = $this->getDoctrine()
         ->getManager()
         ->getRepository('App\Entity\Command')
@@ -149,7 +149,7 @@ class CommandControllerApi extends AbstractController
     }
 
     /**
-     * @Route("/clearCommandApi", name="clearCommandApi", methods={"GET"})
+     * @Route("/clearCommandApi", name="clearCommandApi", methods={"PUT"})
      */
     public function clearCommand(Request $request)
     {

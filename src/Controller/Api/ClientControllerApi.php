@@ -28,7 +28,6 @@ class ClientControllerApi extends AbstractController
           $client->setPrenom($data['firstname']);
           $client->setNom($data['name']);
           $client->setSolde(0);
-
           $em = $this->getDoctrine()->getManager();
           $em->persist($client);
           $em->flush();
@@ -56,21 +55,18 @@ class ClientControllerApi extends AbstractController
       $em = $this->getDoctrine()->getManager();
       if ($client !== null)
       {
-        $client_firstname = $client->getPrenom();
-        $client_name = $client->getNom();
         $em->remove($client);
         $em->flush();
-
         return new JsonResponse(['result' => true , 'id' => $id, 'info' => 'client deleted']);
       }
       else
       {
-        return new JsonResponse(['result' => false]);
+        return new JsonResponse(['result' => false , 'info'=>'client not found']);
       }
     }
 
      /**
-     * @Route("/getClientApi", name="getClientApi", methods={"GET"})
+     * @Route("/clientsApi", name="getClientApi", methods={"GET"})
      */
     public function getClients()
     {
