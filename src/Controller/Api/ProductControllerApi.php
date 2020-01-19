@@ -61,11 +61,11 @@ class ProductControllerApi extends AbstractController
 
           $id = $product->getId();
 
-          return new JsonResponse(['result' => true,'id'=> $id ,'name' => $data['name'],'prix'=> $data['prix']]);
+          return new JsonResponse(['result' => true,'id'=> $id ,'info' => 'product created']);
         }
         else
         {
-          return new JsonResponse(['result' => false]);
+          return new JsonResponse(['result' => false, 'info' => 'An error occured']);
         }
     }
 

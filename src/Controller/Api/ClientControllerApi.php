@@ -34,11 +34,11 @@ class ClientControllerApi extends AbstractController
 
           $id = $client->getId();
 
-          return new JsonResponse(['result' => true,'id'=> $id]);
+          return new JsonResponse(['result' => true,'id'=> $id , 'info' => 'Client created']);
         }
         else
         {
-          return new JsonResponse(['result' => false]);
+          return new JsonResponse(['result' => false , 'info'=> 'An error occured']);
         }
     }
 
